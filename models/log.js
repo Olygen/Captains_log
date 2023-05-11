@@ -15,6 +15,7 @@ const logSchema = new Schema({
     shipIsBroken: {
         type: Boolean,
         default: true
+        // default: false
     }
 }, { timestamps: true });
 
