@@ -58,27 +58,61 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-  // Create // recieves info from new route to then create a new log w/ it
-  router.post('/', async (req, res) => {
+//Update/PUT
+router.put('/:id', async (req, res) => {
   try {
-      const newLog = await Log.create(req.body);
-      console.log(newLog);
-      //console.log(logs);
-      // redirect is making a GET request to the path logs
-      res.redirect(`/logs/${newLog._id}`);
-  } catch (err) {
-      res.status(400).send(err);
-  }
-  });
-
-  // Show // displays one log by id
-  router.get('/:id', async (req, res) => {
-  try {
-    const foundLog = await Log.findById(req.params.id);
-    res.status(200).render('Show', { log: foundLog });
+    req.body.shipIsBroken = req.body.shipIsBroken === 'on';
+    const updatedLog = await Log.findByIdAndUpdate(
+      // id grabbed from the url in Edit.jsx
+      req.params.id,
+      // Data from Edit form
+      req.body,
+      // Need this to prevent a delay in the update
+      { new: true }
+    );
+    console.log(updatedLog);
+    // Redirect to that log's show page
+    res.redirect(`/logs/${req.params.id}`);
   } catch (err) {
     res.status(400).send(err);
   }
+});
+
+// Create // recieves info from new route to then create a new log w/ it
+router.post('/', async (req, res) => {
+try {
+    const newLog = await Log.create(req.body);
+    console.log(newLog);
+    //console.log(logs);
+    // redirect is making a GET request to the path logs
+    res.redirect(`/logs/${newLog._id}`);
+} catch (err) {
+    res.status(400).send(err);
+}
+});
+
+// Edit
+router.get('/:id/edit', async (req, res) => {
+  try {
+    // finding the document that we are about to edit, giving the Edit.jsx the document found through props
+    const foundLog = await Log.findById(req.params.id);
+    res.render('Edit', {
+      log: foundLog,
+    });
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
+
+
+// Show // displays one log by id
+router.get('/:id', async (req, res) => {
+try {
+  const foundLog = await Log.findById(req.params.id);
+  res.status(200).render('Show', { log: foundLog });
+} catch (err) {
+  res.status(400).send(err);
+}
 });
 
 module.exports = router;
