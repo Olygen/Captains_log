@@ -4,6 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const db = require('./config/database');
 const logsController = require('./controllers/logsController');
+const methodOverride = require('method-override');
 
 
 // This line of code will run the function below once 
@@ -21,7 +22,11 @@ app.set('view engine', 'jsx');
 app.set('views', './views');
 
 // Custom Middleware
-app.use(express.urlencoded({ extended: false }));
+// This enables the req.body after app has been defined
+app.use(express.urlencoded({ extended: false })); 
+//use methodOverride.  We'll be adding a query parameter to our delete form named _method
+app.use(methodOverride('_method'));
+// Custom Middleware
 app.use((req, res, next) => {
   console.log('Middleware running...');
   next();

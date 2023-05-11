@@ -1,10 +1,12 @@
 const React = require('react');
+const DefaultLayout = require("./layout/Default");
 
 class New extends React.Component {
     render() {
       return (
       <div>
-        <h1>Captain's Log</h1>
+        <DefaultLayout>
+        <h1>Captain's Log New Entry</h1>
         <form action="/logs" method="POST" >
         <div>
             <label htmlFor="title">Title: </label>
@@ -22,6 +24,7 @@ class New extends React.Component {
             <input type="submit" value="Add Log" />
         </div>
         </form>
+        </DefaultLayout>
       </div>
       )
     }
